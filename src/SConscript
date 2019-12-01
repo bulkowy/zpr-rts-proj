@@ -1,0 +1,10 @@
+Import('env')
+
+client_lib = env.SConscript('client/SConscript')
+server_lib = env.SConscript('server/SConscript')
+
+p = env.Program('program', ['main.cpp'],
+        LIBS = [ client_lib, server_lib, ])
+
+
+Return('p')

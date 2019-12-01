@@ -1,0 +1,5 @@
+Import('env')
+
+server_lib = env.StaticLibrary('server', Glob('*.cpp'))
+Export('server_lib')
+Return('server_lib')

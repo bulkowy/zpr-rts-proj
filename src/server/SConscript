@@ -1,5 +1,6 @@
 Import('env')
 
 server_lib = env.StaticLibrary('server', Glob('*.cpp'))
+tests = env.BoostTests(Glob("../tests/*.cpp"), server_lib)
 Export('server_lib')
 Return('server_lib')

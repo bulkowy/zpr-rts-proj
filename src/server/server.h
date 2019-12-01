@@ -3,7 +3,7 @@
 
 namespace server {
 
-void i_am_the_server();
+bool i_am_the_server();
 
 }
 

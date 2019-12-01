@@ -36,7 +36,7 @@ def initial():
 
 # build exec
 def build():
-  program = SConscript('src/Sconscript', duplicate=0) # 16.1 tutorial
+  program = SConscript('src/SConscript', duplicate=0) # 16.1 tutorial
   env.Install('./', program) # 13.1 tutorial
 
 initial()

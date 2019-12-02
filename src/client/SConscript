@@ -1,5 +1,6 @@
 Import('env')
+Import('target_path')
 
-client_lib = env.StaticLibrary('client', Glob('*.cpp'))
-Export('client_lib')
-Return('client_lib')
+client = env.Program(target_path + 'client', Glob('*.cpp'))
+
+Return('client')

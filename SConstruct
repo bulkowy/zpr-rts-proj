@@ -1,4 +1,5 @@
 # sconstruct
+import os
 
 # configurables
 
@@ -8,6 +9,8 @@ cpp_flags = ['-Wall', '-Werror']
 cxx_flags = ['-std=c++14']
 DEBUG = True
 
+target_path = os.getcwd() + '/bin/'
+Export('target_path')
 
 # rest
 
@@ -59,8 +62,7 @@ def initial():
 
 # build exec
 def build():
-  program = SConscript('src/SConscript', duplicate=0) # 16.1 tutorial
-  env.Install('./', program) # 13.1 tutorial
+  SConscript('src/SConscript', duplicate=0) # 16.1 tutorial
 
 initial()
 

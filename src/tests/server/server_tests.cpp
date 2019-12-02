@@ -1,4 +1,4 @@
-#include "../server/server.h"
+#include "../../server/server.h"
 
 #include <boost/test/unit_test.hpp>
 

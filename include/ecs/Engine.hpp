@@ -169,7 +169,7 @@ private:
     std::vector<System::Ptr>                        _systems;
 };
 
-// ----- implementacje
+// ----- implementacje ------
 
 Engine::Engine() :
     _lastEntity(_invalidEntity),

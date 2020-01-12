@@ -1,4 +1,2 @@
-Import('env')
-
-env.SConscript('client/SConscript')
-env.SConscript('server/SConscript')
+#SConscript(['client/SConscript'])
+SConscript(['server/SConscript'])

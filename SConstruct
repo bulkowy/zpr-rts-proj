@@ -16,7 +16,6 @@ Export('target_path')
 
 def create_env(vars):
   env = Environment(variables = vars) # 7.2 tutorial
-  Export('env') # 16.5.3 tutorial
   fill_env_flags(env)
   add_special_methods(env)
   return env
@@ -68,5 +67,6 @@ initial()
 
 vars = create_vars()
 env = create_env(vars)
+Export('env') # 16.5.3 tutorial
 
 build()

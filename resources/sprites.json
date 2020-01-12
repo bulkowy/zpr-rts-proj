@@ -1,0 +1,16 @@
+{
+	"units":
+	[
+		{"name":"misiek", "path":"resources/sprites/misiek.png"},
+		{"name":"tubaman", "path":"resources/sprites/tubaman.png"}
+	],
+	"HUD":
+	[
+		{"name":"toolbar", "path":"resources/sprites/toolbar.png"}
+	],
+	"terrain":
+	[
+		{"name":"grass", "path":"resources/sprites/grass.png"},
+		{"name":"tree", "path":"resources/sprites/tree.png"}
+	]
+}

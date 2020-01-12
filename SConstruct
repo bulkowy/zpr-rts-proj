@@ -3,8 +3,9 @@ import os
 
 # configurables
 
-libs = []
-lib_paths = []
+libs = ['sfml-graphics','sfml-window', 'sfml-system', 'sfml-audio', 'jsoncpp']
+lib_paths = ['/usr/lib/x86_64-linux-gnu/']
+include_paths = ['#/src', '/usr/include']
 cpp_flags = ['-Wall', '-Werror']
 cxx_flags = ['-std=c++14']
 DEBUG = True
@@ -31,7 +32,10 @@ def fill_env_flags(env):
   env.Append(CCFLAGS=cxx_flags)
   
   env.Append(CCFLAGS=['-g'] if env['DEBUG'] else ['-O2'])
-  env.Append(CPPPATH=['#/src'])
+  env.Append(CPPPATH=include_paths)
+
+  env.Append(LIBS=libs)
+  env.Append(LIBPATH=lib_paths)
 
 def add_special_methods(env):
     boost_libs = [] if env['CC'] == 'cl' else ['boost_unit_test_framework']

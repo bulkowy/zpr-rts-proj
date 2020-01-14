@@ -100,11 +100,11 @@ public:
     /**
      * @brief Funkcja wykonująca obliczenia na wszystkich adekwatnych Obiektach.
      *
-     * @param[in] elapsedTime  Czas który upłynął od ostatniego wywołania funkcji, w sekundach.
+     * @param[in] frameTime  Czas który upłynął od ostatniego wywołania funkcji, w sekundach.
      *
      * @return Liczba uaktualnionych Obiektów.
      */
-    virtual void update(float elapsedTime) = 0;
+    virtual void update(int64_t frameTime) = 0;
 
 protected:
     /**
@@ -112,8 +112,9 @@ protected:
      *
      * @param[in] aRequiredComponents   Zbiór Komponentów wymaganych przez System.
      */
-    inline void setRequiredComponents(std::vector<ComponentTypeSet>&& aRequiredComponents) {
-        _requiredComponents = std::move(aRequiredComponents);
+    inline void addRequiredComponentSet(ComponentTypeSet&& aRequiredComponents) {
+        _requiredComponents.push_back(std::move(aRequiredComponents));
+        _entityFamilies.push_back(std::set<Entity>());
     }
 
     /**

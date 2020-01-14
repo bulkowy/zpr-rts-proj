@@ -14,8 +14,6 @@ namespace ecs {
  *  Każda klasa określająca komponent musi dziedziczyć po tej strukturze i zdefiniować swój własny, unikalny #ComponentType.
  */
 struct Component {
-    /// Domyślnie ustawiony typ nieprawidłowy
-    static const ComponentType _type = _invalidComponentType;
 };
 
 } // namespace ecs

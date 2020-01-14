@@ -16,6 +16,8 @@
 #include <limits>
 #include <stdexcept>
 #include <algorithm>
+#include <chrono>   // std::chrono::duration
+#include <thread>   // std::sleep_for
 
 namespace ecs {
 
@@ -137,11 +139,11 @@ public:
     /**
      * @brief   Wykonaj obliczenia (update) dla każdego Obiektu wszystkich Systemów.
      *
-     * @param[in] aElapsedTime Czas który upłynął od ostatniego wywołania, w sekundach.
+     * @param[in] frameTime Czas który upłynął od ostatniego wywołania, w milisekundach.
      *
      * @return  Liczbę przetworzonych Obiektów (dany obiekt może być przetworzony wielokrotnie przez wiele systemów).
      */
-    void update(float aElapsedTime);
+    void update(int64_t frameTime);
 
 private:
     /// Id ostatniego utworzonego obiektu (zaczyna się od 0)
@@ -240,13 +242,17 @@ void Engine::unregisterEntity(const Entity aEntity) {
 }
 
 // Wykonaj obliczenia dla wszystkich Obiektów wszystkich Systemów.
-void Engine::update(float aElapsedTime) {
+void Engine::update(int64_t frameTime) {
+
+    auto frameStart = std::chrono::system_clock::now();
 
     for (auto system  = _systems.begin();
               system != _systems.end();
             ++system) {
-        (*system)->update(aElapsedTime);
+        (*system)->update(frameTime);
     }
+
+    std::this_thread::sleep_until(frameStart + std::chrono::milliseconds(frameTime));
 
     return;
 }

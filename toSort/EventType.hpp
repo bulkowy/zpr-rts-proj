@@ -4,6 +4,9 @@
 namespace networking 
 {
 
+/**
+ * @brief Enum defining possible packets in communication
+ */
 enum class EventType
 {
     Connected,

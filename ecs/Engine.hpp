@@ -143,7 +143,7 @@ public:
      *
      * @return  Liczbę przetworzonych Obiektów (dany obiekt może być przetworzony wielokrotnie przez wiele systemów).
      */
-    void update(int64_t frameTime);
+    virtual void update(int64_t frameTime);
 
 private:
     /// Id ostatniego utworzonego obiektu (zaczyna się od 0)

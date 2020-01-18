@@ -111,7 +111,7 @@ public:
      *
      * @return Referencja do zbioru Komponentów.
      */
-    inline const std::unordered_map<Entity, C>& getComponents() {
+    inline std::unordered_map<Entity, C>& getComponents() {
         return _store;
     }
 

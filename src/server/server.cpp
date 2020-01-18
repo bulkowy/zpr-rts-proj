@@ -10,8 +10,6 @@
 #include "ServerEngine.hpp"
 #include <src/game/FileManager.hpp>
 #include <src/game/components/Components.hpp>
-#include <src/client/BasicRenderer.hpp>
-#include <src/client/MapRenderer.hpp>
 #include "systems/Systems.hpp"
 
 // do clienta
@@ -61,12 +59,7 @@ bool server::i_am_the_server() {
     
     while(window->isOpen()){
         sf::Event event;
-        while (window->pollEvent(event)) {
-                if( (event.type >= 7 && event.type <= 13) || event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus ) continue;
-                // close the window on close request
-                if (event.type == sf::Event::Closed) window->close();
-                if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window->close();
-            }
+        while (window->pollEvent(event)) { engine.handleEvent(event); }
         window->clear(sf::Color::Black);
         engine.update(17);
         window->display();

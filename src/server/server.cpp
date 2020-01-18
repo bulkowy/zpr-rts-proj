@@ -14,6 +14,11 @@
 #include <src/client/MapRenderer.hpp>
 #include "systems/Systems.hpp"
 
+// do clienta
+#include <src/client/MapRenderer.hpp>
+#include <src/client/BasicRenderer.hpp>
+#include <src/client/SelectedRenderer.hpp>
+
 using namespace std;
 
 bool server::i_am_the_server() {
@@ -32,10 +37,12 @@ bool server::i_am_the_server() {
     engine.createComponentStore<Move>();
     engine.createComponentStore<Health>();
     engine.createComponentStore<Renderable>();
+    engine.createComponentStore<Selectable>();
 
     engine.addSystem(ecs::System::Ptr(new MoveSystem(engine)));
     engine.addSystem(ecs::System::Ptr(new MapRenderer(engine)));
     engine.addSystem(ecs::System::Ptr(new BasicRenderer(engine)));
+    engine.addSystem(ecs::System::Ptr(new SelectedRenderer(engine)));
 
 
     ecs::Entity entity1 = engine.createEntity();
@@ -48,6 +55,7 @@ bool server::i_am_the_server() {
     Move move(2);
     move.setDestination(0, 5);
     engine.addComponent<Move>(entity1, std::move(move));
+    engine.addComponent<Selectable>(entity1, Selectable(fileManager->getSprite("selected")));
 
     engine.registerEntity(entity1);
     

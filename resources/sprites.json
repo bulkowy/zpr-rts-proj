@@ -12,5 +12,10 @@
 	[
 		{"name":"grass", "path":"resources/sprites/grass.png"},
 		{"name":"tree", "path":"resources/sprites/tree.png"}
+	],
+	"misc":
+	[
+		{"name":"selected", "path":"resources/sprites/selected.png"},
+		{"name":"destination", "path":"resources/sprites/destination.png"}
 	]
 }

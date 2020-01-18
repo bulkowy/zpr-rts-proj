@@ -19,10 +19,9 @@ bool server::i_am_the_server() {
 
     std::shared_ptr<sf::RenderWindow> window (new sf::RenderWindow(sf::VideoMode(800, 600), "Test!"));
 	window->setKeyRepeatEnabled(false);
-    engine.setWindow(*window);
+    engine.setWindow(window);
 
-    BasicRenderer renderer(engine);
-    engine.addSystem(ecs::System::Ptr(&renderer));
+    engine.addSystem(ecs::System::Ptr(new BasicRenderer(engine)));
 
     FileManager fileManager = FileManager();
     fileManager.init("resources/sprites.json");

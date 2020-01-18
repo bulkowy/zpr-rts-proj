@@ -20,7 +20,7 @@ public:
     GridMap* getGridMap() { return &_map; }
 
     //do ClientEngine:
-    void setWindow(sf::RenderWindow& aWindow) {_window = std::shared_ptr<sf::RenderWindow>(&aWindow); }
+    void inline setWindow(std::shared_ptr<sf::RenderWindow> aWindow) {_window = aWindow; }
     sf::RenderWindow* getWindow() { return _window.get(); }
 };
 

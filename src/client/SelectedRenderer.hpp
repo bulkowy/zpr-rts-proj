@@ -27,9 +27,9 @@ SelectedRenderer::SelectedRenderer(ecs::Engine &engine) : ecs::SimpleIteratingSy
 }
 
 void SelectedRenderer::update(int64_t elapsedTime, ecs::Entity entity) {
-    const Position& position = _engine.getComponentStore<Position>().get(entity);
     Selectable& selectable = _engine.getComponentStore<Selectable>().get(entity);
     if(!selectable.selected) return;
+    const Position& position = _engine.getComponentStore<Position>().get(entity);
     float x = calculatePosition(position.x, position.xoffset);
     float y = calculatePosition(position.y, position.yoffset);
     selectable.sprite->setPosition(x, y);

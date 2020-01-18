@@ -11,6 +11,7 @@
 #include "../game/FileManager.hpp"
 #include "../game/components/Components.hpp"
 #include "../client/BasicRenderer.hpp"
+#include "systems/Systems.hpp"
 
 using namespace std;
 
@@ -21,8 +22,6 @@ bool server::i_am_the_server() {
 	window->setKeyRepeatEnabled(false);
     engine.setWindow(window);
 
-    engine.addSystem(ecs::System::Ptr(new BasicRenderer(engine)));
-
     FileManager fileManager = FileManager();
     fileManager.init("resources/sprites.json");
 
@@ -31,6 +30,10 @@ bool server::i_am_the_server() {
     engine.createComponentStore<Health>();
     engine.createComponentStore<Renderable>();
 
+    engine.addSystem(ecs::System::Ptr(new MoveSystem(engine)));
+    engine.addSystem(ecs::System::Ptr(new BasicRenderer(engine)));
+
+
     ecs::Entity entity1 = engine.createEntity();
     cout << "Entity1: " << entity1 << endl;
 
@@ -38,6 +41,9 @@ bool server::i_am_the_server() {
     Renderable renderable(fileManager.getSprite("misiek"));
     engine.addComponent<Renderable>(entity1, std::move(renderable));
     engine.addComponent<Health>(entity1, Health(100));
+    Move move(1);
+    move.setDestination(0, 5);
+    engine.addComponent<Move>(entity1, std::move(move));
 
     engine.registerEntity(entity1);
     

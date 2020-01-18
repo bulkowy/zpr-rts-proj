@@ -15,9 +15,9 @@ namespace ecs {
 class IComponentStore {
 public:
     /**
-     * @brief Unique pointer do ComponentStore
+     * @brief Shared pointer do ComponentStore
      */
-    typedef std::unique_ptr<IComponentStore> Ptr;
+    typedef std::shared_ptr<IComponentStore> Ptr;
 };
 
 /**

@@ -16,6 +16,7 @@
 #include <src/client/MapRenderer.hpp>
 #include <src/client/BasicRenderer.hpp>
 #include <src/client/SelectedRenderer.hpp>
+#include <src/client/DestinationRenderer.hpp>
 
 using namespace std;
 
@@ -39,6 +40,7 @@ bool server::i_am_the_server() {
 
     engine.addSystem(ecs::System::Ptr(new MoveSystem(engine)));
     engine.addSystem(ecs::System::Ptr(new MapRenderer(engine)));
+    engine.addSystem(ecs::System::Ptr(new DestinationRenderer(engine)));
     engine.addSystem(ecs::System::Ptr(new BasicRenderer(engine)));
     engine.addSystem(ecs::System::Ptr(new SelectedRenderer(engine)));
 

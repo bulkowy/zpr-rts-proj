@@ -32,9 +32,9 @@ void SelectedRenderer::update(int64_t elapsedTime, ecs::Entity entity) {
     const Position& position = _engine.getComponentStore<Position>().get(entity);
     float x = calculatePosition(position.x, position.xoffset);
     float y = calculatePosition(position.y, position.yoffset);
-    selectable.sprite->setPosition(x, y);
+    selectable.selectedSprite->setPosition(x, y);
     ServerEngine* engine = dynamic_cast<ServerEngine*>(&_engine);
-    (engine->getWindow())->draw(*selectable.sprite.get());
+    (engine->getWindow())->draw(*selectable.selectedSprite.get());
 }
 
 inline float SelectedRenderer::calculatePosition(int position, int offset) {

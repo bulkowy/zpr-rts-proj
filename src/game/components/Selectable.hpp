@@ -12,9 +12,14 @@ struct Selectable : public ecs::Component {
 
     /** Znacznik do wyświetlenia
      */
-    std::unique_ptr<sf::Sprite> sprite;
+    std::unique_ptr<sf::Sprite> selectedSprite;
 
-    Selectable(sf::Sprite* aSprite) : sprite(aSprite) {}
+    /**
+     * Znacznik destynacji do wyświetlenia
+     */
+    std::unique_ptr<sf::Sprite> destinationSprite;
+
+    Selectable(sf::Sprite* aSprite) : selectedSprite(aSprite) { destinationSprite = std::unique_ptr<sf::Sprite>(FileManager::getInstance()->getSprite("destination")); }
 
     bool selected = false;
 

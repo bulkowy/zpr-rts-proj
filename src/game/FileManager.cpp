@@ -1,5 +1,7 @@
 #include "FileManager.hpp"
 
+FileManager* FileManager::_instance = 0;
+
 FileManager::FileManager() {
 }
 

@@ -8,22 +8,25 @@
 #include <SFML/Window.hpp>
 
 #include "ServerEngine.hpp"
-#include "../game/FileManager.hpp"
-#include "../game/components/Components.hpp"
-#include "../client/BasicRenderer.hpp"
+#include <src/game/FileManager.hpp>
+#include <src/game/components/Components.hpp>
+#include <src/client/BasicRenderer.hpp>
+#include <src/client/MapRenderer.hpp>
 #include "systems/Systems.hpp"
 
 using namespace std;
 
 bool server::i_am_the_server() {
-    ServerEngine engine(15, 15);
+    static const int WIDTH = 800;
+    static const int HEIGHT = 600;
+    ServerEngine engine(WIDTH/GridMap::TILE_SIDE, HEIGHT/GridMap::TILE_SIDE);
 
-    std::shared_ptr<sf::RenderWindow> window (new sf::RenderWindow(sf::VideoMode(800, 600), "Test!"));
+    std::shared_ptr<sf::RenderWindow> window (new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Test!"));
 	window->setKeyRepeatEnabled(false);
     engine.setWindow(window);
 
-    FileManager fileManager = FileManager();
-    fileManager.init("resources/sprites.json");
+    FileManager* fileManager = FileManager::getInstance();
+    fileManager->init("resources/sprites.json");
 
     engine.createComponentStore<Position>();
     engine.createComponentStore<Move>();
@@ -31,6 +34,7 @@ bool server::i_am_the_server() {
     engine.createComponentStore<Renderable>();
 
     engine.addSystem(ecs::System::Ptr(new MoveSystem(engine)));
+    engine.addSystem(ecs::System::Ptr(new MapRenderer(engine)));
     engine.addSystem(ecs::System::Ptr(new BasicRenderer(engine)));
 
 
@@ -38,10 +42,10 @@ bool server::i_am_the_server() {
     cout << "Entity1: " << entity1 << endl;
 
     engine.addComponent<Position>(entity1, Position());
-    Renderable renderable(fileManager.getSprite("misiek"));
+    Renderable renderable(fileManager->getSprite("misiek"));
     engine.addComponent<Renderable>(entity1, std::move(renderable));
     engine.addComponent<Health>(entity1, Health(100));
-    Move move(1);
+    Move move(2);
     move.setDestination(0, 5);
     engine.addComponent<Move>(entity1, std::move(move));
 

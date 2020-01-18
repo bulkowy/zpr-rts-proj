@@ -185,10 +185,6 @@ Engine::~Engine() {
 
 // Dodaj System.
 void Engine::addSystem(const System::Ptr& aSystemPtr) {
-    // Sprawdź czy są określone wymagane komponenty
-    if ((!aSystemPtr) || (aSystemPtr->getRequiredComponents().empty())) {
-        throw std::runtime_error("System shall specified required Components");
-    }
     _systems.push_back(aSystemPtr);
 }
 

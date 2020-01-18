@@ -5,7 +5,7 @@ import os
 
 libs = ['sfml-graphics','sfml-window', 'sfml-system', 'sfml-audio', 'jsoncpp']
 lib_paths = ['/usr/lib/x86_64-linux-gnu/']
-include_paths = ['#/include', '/usr/include']
+include_paths = ['#/', '/usr/include']
 cpp_flags = ['-Wall', '-Werror']
 cxx_flags = ['-std=c++14']
 DEBUG = True

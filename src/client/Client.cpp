@@ -43,7 +43,15 @@ void Client::run() {
 		stop_ = tick();
 
 		sf::sleep(sf::milliseconds(100));
-	}	
+	}
+
+    std::set<ecs::Entity> temp;
+    temp.insert(engine_->createEntity());
+    temp.insert(engine_->createEntity());
+    networking::MoveCommand moveCommand(temp, 42, 56);
+    packet << moveCommand;
+    socket_.send(packet);
+    packet.clear();
 }
 
 bool Client::tick() {

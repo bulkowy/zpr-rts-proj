@@ -1,9 +1,11 @@
 #ifndef __EVENT_HPP_
 #define __EVENT_HPP_
 
+#include <list>
+#include <set>
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
-#include <list>
+#include <ecs/Entity.hpp>
 #include "EventType.hpp"
 
 namespace networking
@@ -220,6 +222,63 @@ public:
 
     std::list<SetGameList::Game> list_;
 };
+
+/**
+ * @brief Event defining packet informing about Client wanting to join selected game
+ */
+class MoveCommand : public Event 
+{
+public:
+    /**
+     * @brief Default constructor of MoveCommand Event
+     * 
+     * Sets entity_ as illegal value to be sure that it will be properly filled
+     */
+    MoveCommand() : Event(EventType::MoveCommand) {}
+
+    /**
+     * @brief Param constructor of MoveCommand Event
+     * 
+     * @param entity - ID of selected game
+     */
+    MoveCommand(std::set<ecs::Entity> entities, int x, int y) : Event(EventType::MoveCommand), entities_(entities), x_(x), y_(y) {}
+
+    /**
+     * @brief Get Game ID
+     * 
+     * @return int 
+     */
+    std::set<ecs::Entity> getEntities() const { return entities_; }
+
+    /**
+     * @brief Add
+     * 
+     * @param gameID - ID of selected game
+     */
+    void setEntities(std::set<ecs::Entity> entities) { entities_ = entities; }
+
+    /**
+     * @brief Serialize Event to Packet
+     * 
+     * @return sf::Packet& 
+     */
+    virtual sf::Packet& serialize(sf::Packet&);
+
+    /**
+     * @brief Deserialize Event from Packet
+     * 
+     * @return sf::Packet& 
+     */
+    virtual sf::Packet& deserialize(sf::Packet&);
+
+    virtual unsigned int size() { return entities_.size(); }
+
+private:
+    std::set<ecs::Entity> entities_;    /**< Id Obiektu którego tyczy się komenda */
+    int x_;                             /**< Koordynaty kratki która ma stać się nowym cele Obiektu */
+    int y_;                             /**< Koordynaty kratki która ma stać się nowym cele Obiektu */
+};
+
 
 sf::Packet& operator>>(sf::Packet& packet, Event& event);
 sf::Packet& operator<<(sf::Packet& packet, Event& event);

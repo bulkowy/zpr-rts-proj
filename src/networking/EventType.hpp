@@ -14,7 +14,8 @@ enum class EventType
     CreateGame,
     JoinGame,
     GetGameList,
-    SetGameList
+    SetGameList,
+    MoveCommand
 };
 
 }

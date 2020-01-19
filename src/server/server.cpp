@@ -98,15 +98,22 @@ void Server::handleIncomingPacket(sf::Packet& packet, Peer& peer, bool& detected
     sf::Int32 type;
     packet >> type;
 
-    std::cout << "test" << std::endl;
+    std::cout << "test " << type << std::endl;
+    sf::Int16 x, y;
 
     switch (static_cast<networking::EventType>(type)) {
         case networking::EventType::Disconnected:
             peer.timedOut = true;
             detectedTimeout = true;
             break;
-    
+        case networking::EventType::MoveCommand:
+            packet >> x >> y;
+            std::cout << "x: " << x << ", y: " << y << endl;
+            break;
+
         default:
+            packet >> x >> y;
+            std::cout << "x: " << x << ", y: " << y << endl;
             break;
     }
 }

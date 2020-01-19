@@ -1,5 +1,0 @@
-Import('env')
-Import('target_path')
-
-engine = env.Library(target_path + '/lib/engine', Glob('*.cpp'))
-#tests = env.BoostTests(Glob("../tests/engine/*.cpp"), libengine)

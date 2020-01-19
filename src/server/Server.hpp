@@ -12,7 +12,6 @@
 
 namespace server
 {
-    bool i_am_the_server(); //backwards compatibility
 /**
  * @brief Server class that defines main thread of game server logic. 
  * 

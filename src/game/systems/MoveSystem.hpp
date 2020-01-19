@@ -14,7 +14,7 @@ private:
 public:
     MoveSystem(ecs::Engine engine);
     ~MoveSystem() {}
-    void update(int64_t frameLength, ecs::Entity entity);
+    void update(unsigned int frameLength, ecs::Entity entity);
 };
 
 
@@ -28,7 +28,7 @@ _positionComponents = &_engine.getComponentStore<Position>();
 _moveComponents = &_engine.getComponentStore<Move>();
 }
 
-void MoveSystem::update(int64_t frameLength, ecs::Entity entity) {
+void MoveSystem::update(unsigned int frameLength, ecs::Entity entity) {
     auto position = &(_positionComponents->get(entity));
     auto move = &_moveComponents->get(entity);
 

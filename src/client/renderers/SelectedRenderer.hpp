@@ -5,7 +5,7 @@
 #include <ecs/SimpleIteratingSystem.hpp>
 #include <ecs/Entity.hpp>
 #include <SFML/Window.hpp>
-#include "../game/components/Components.hpp"
+#include <src/game/components/Components.hpp>
 
 class SelectedRenderer : public ecs::SimpleIteratingSystem
 {
@@ -14,7 +14,7 @@ private:
 public:
     SelectedRenderer(ecs::Engine &engine);
     ~SelectedRenderer() {};
-    void update(int64_t elapsedTime, ecs::Entity entity);
+    void update(unsigned int elapsedTime, ecs::Entity entity);
 
 };
 
@@ -26,14 +26,14 @@ SelectedRenderer::SelectedRenderer(ecs::Engine &engine) : ecs::SimpleIteratingSy
     addRequiredComponentSet(std::move(set));
 }
 
-void SelectedRenderer::update(int64_t elapsedTime, ecs::Entity entity) {
+void SelectedRenderer::update(unsigned int elapsedTime, ecs::Entity entity) {
     Selectable& selectable = _engine.getComponentStore<Selectable>().get(entity);
     if(!selectable.selected) return;
     const Position& position = _engine.getComponentStore<Position>().get(entity);
     float x = calculatePosition(position.x, position.xoffset);
     float y = calculatePosition(position.y, position.yoffset);
     selectable.selectedSprite->setPosition(x, y);
-    ServerEngine* engine = dynamic_cast<ServerEngine*>(&_engine);
+    ClientEngine* engine = dynamic_cast<ClientEngine*>(&_engine);
     (engine->getWindow())->draw(*selectable.selectedSprite.get());
 }
 

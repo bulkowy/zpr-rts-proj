@@ -104,7 +104,7 @@ public:
      *
      * @return Liczba uaktualnionych Obiektów.
      */
-    virtual void update(int64_t frameTime) = 0;
+    virtual void update(unsigned int frameTime) = 0;
 
 protected:
     /**

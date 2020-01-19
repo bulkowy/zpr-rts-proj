@@ -11,8 +11,8 @@ private:
     
 public:
     SimpleIteratingSystem(Engine& engine);
-    void update(int64_t elapsedTime);
-    virtual void update(int64_t elapsedTime, Entity entity) = 0;
+    void update(unsigned int elapsedTime);
+    virtual void update(unsigned int elapsedTime, Entity entity) = 0;
 };
 
 SimpleIteratingSystem::SimpleIteratingSystem(Engine& engine)
@@ -25,7 +25,7 @@ SimpleIteratingSystem::SimpleIteratingSystem(Engine& engine)
  *
  * @param[in] frameTime  Czas, który upłynął od ostatniego wywołania, w milisekundach.
  */
- void SimpleIteratingSystem::update(int64_t frameTime) {
+ void SimpleIteratingSystem::update(unsigned int frameTime) {
     for (auto entity  = _entityFamilies[0].begin();
               entity != _entityFamilies[0].end();
             ++entity) {

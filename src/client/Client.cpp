@@ -1,6 +1,6 @@
 #include "Client.hpp"
 #include <iostream>
-
+#include <src/client/ClientEngine.hpp>
 
 namespace client {
 
@@ -27,6 +27,8 @@ void Client::run() {
     sf::Clock noPacketClock;
     sf::Time noPacketTime = sf::Time::Zero;
 
+    engine_ = std::make_unique<ClientEngine>();
+
 	while (!stop_)
 	{
         if (noPacketTime > clientTimeout_) { stop(); break; }
@@ -45,7 +47,7 @@ void Client::run() {
 }
 
 void Client::tick() {
-
+    engine_->tick();
 }
 
 void Client::handleServerPacket(sf::Packet& packet) {

@@ -2,8 +2,10 @@
 #define __CLIENT_HPP_
 
 #include <vector>
+#include <memory>
 #include <src/networking/Event.hpp>
 #include <src/networking/EventType.hpp>
+#include "ClientEngine.hpp"
 
 namespace client
 {
@@ -97,6 +99,8 @@ private:
     bool isConnected_;  /**< is client connected */
 
     sf::Time clientTimeout_; /**< time for client to timeout from server */
+
+    std::unique_ptr<ClientEngine> engine_;   /**< game engine */
 
 };
 }

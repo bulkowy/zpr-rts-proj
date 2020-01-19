@@ -5,7 +5,8 @@
 #include <ecs/SimpleIteratingSystem.hpp>
 #include <ecs/Entity.hpp>
 #include <SFML/Window.hpp>
-#include "../game/components/Components.hpp"
+#include <src/game/components/Components.hpp>
+#include "../ClientEngine.hpp"
 
 class DestinationRenderer : public ecs::SimpleIteratingSystem
 {
@@ -14,7 +15,7 @@ private:
 public:
     DestinationRenderer(ecs::Engine &engine);
     ~DestinationRenderer() {};
-    void update(int64_t elapsedTime, ecs::Entity entity);
+    void update(unsigned int elapsedTime, ecs::Entity entity);
 
 };
 
@@ -27,7 +28,7 @@ DestinationRenderer::DestinationRenderer(ecs::Engine &engine) : ecs::SimpleItera
     addRequiredComponentSet(std::move(set));
 }
 
-void DestinationRenderer::update(int64_t elapsedTime, ecs::Entity entity) {
+void DestinationRenderer::update(unsigned int elapsedTime, ecs::Entity entity) {
     Selectable& selectable = _engine.getComponentStore<Selectable>().get(entity);
     if(!selectable.selected) return;
     const Position& position = _engine.getComponentStore<Position>().get(entity);
@@ -37,7 +38,7 @@ void DestinationRenderer::update(int64_t elapsedTime, ecs::Entity entity) {
     float x = calculatePosition(move.destination.x);
     float y = calculatePosition(move.destination.y);
     selectable.destinationSprite->setPosition(x, y);
-    ServerEngine* engine = dynamic_cast<ServerEngine*>(&_engine);
+    ClientEngine* engine = dynamic_cast<ClientEngine*>(&_engine);
     (engine->getWindow())->draw(*selectable.destinationSprite.get());
 }
 

@@ -83,8 +83,12 @@ private:
 
     /**
      * @brief Method to parse updates on client and send them to server
+     * 
+     * Metoda wykonująca krok silnika gry.
+     * 
+     * @return Zwraca wartość logiczną oznaczającą zakończenie działania programu zażądane przez silnik
      */
-    void tick();
+    bool tick();
 
     /**
      * @brief Method deserializing incoming packet from server

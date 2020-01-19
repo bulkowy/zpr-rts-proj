@@ -40,14 +40,14 @@ void Client::run() {
         }
         noPacketClock.restart();
 
-		tick();
+		stop_ = tick();
 
 		sf::sleep(sf::milliseconds(100));
 	}	
 }
 
-void Client::tick() {
-    engine_->tick();
+bool Client::tick() {
+    return engine_->tick();
 }
 
 void Client::handleServerPacket(sf::Packet& packet) {

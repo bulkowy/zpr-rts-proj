@@ -20,16 +20,16 @@ public:
 
     void inline setWindow(std::shared_ptr<sf::RenderWindow> aWindow) {window_ = aWindow; }
     sf::RenderWindow* getWindow() { return window_.get(); }
-    void handleEvent(sf::Event&);
+    bool handleEvent(sf::Event&);
     void lmbClicked(sf::Event&);
     void rmbClicked(sf::Event&);
     int coordsToGridCoords(float);
 
     void registerCommand(std::unique_ptr<Command> command) {commands_.push_back(std::move(command)); }
-    std::vector<std::unique_ptr<Command>> getCommands() {return commands_; }
+    std::vector<std::unique_ptr<Command>>& getCommands() {return commands_; }
     void update(unsigned int frameTime);
 
-    void tick();
+    bool tick();
 };
 
 #endif

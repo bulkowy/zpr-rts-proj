@@ -43,21 +43,22 @@ ClientEngine::ClientEngine() {
 
 }
 
-void ClientEngine::tick() {
+bool ClientEngine::tick() {
     while(window_->isOpen()){
         sf::Event event;
-        while (window_->pollEvent(event)) { handleEvent(event); }
+        while (window_->pollEvent(event)) { if(handleEvent(event)) return true; }
         window_->clear(sf::Color::Black);
         update(17);
         window_->display();
     }
+    return false;
 }
 
-void ClientEngine::handleEvent(sf::Event &event) {
-    if(event.type > 11 || event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus ) return;
+bool ClientEngine::handleEvent(sf::Event &event) {
+    if(event.type > 11 || event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus ) return false;
     // close the window on close request
-    else if (event.type == sf::Event::Closed) window_->close();
-    else if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window_->close();
+    else if (event.type == sf::Event::Closed) { window_->close(); return true; }
+    else if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) { window_->close(); return true; }
     else if(event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left)
         {
@@ -67,6 +68,8 @@ void ClientEngine::handleEvent(sf::Event &event) {
             rmbClicked(event);
         }
     }
+
+    return false;
 }
 
 void ClientEngine::lmbClicked(sf::Event &event) {

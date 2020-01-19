@@ -1,2 +1,3 @@
 #SConscript(['client/SConscript'])
-SConscript(['server/SConscript'])
+#SConscript(['server/SConscript'])
+SConscript('../toSort/SConscript')

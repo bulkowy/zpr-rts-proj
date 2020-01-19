@@ -13,7 +13,7 @@ Server::Peer::Peer() : ready(false), timedOut(false) {
 
 Server::Server(int port) : 
     port_(port), 
-    gameThread_(&Server::run,this), 
+    // gameThread_(&Server::run,this), 
     timeoutTime_(sf::seconds(10.f)),
     stop_(false),
     connectedPlayers_(0),

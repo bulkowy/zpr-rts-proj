@@ -8,7 +8,6 @@
 #include <queue>
 #include <unordered_map>
 #include "Client.hpp"
-#include "Game.hpp"
 #include "EventType.hpp"
 #include "Entity.hpp"
 
@@ -179,7 +178,7 @@ private:
     int maxGames_;                      /**< maximum possible games created by server and simultaneously runned */
     int entitySequence_;                /**< sequence of ID's for entities / clients */
 
-    std::vector<game::Game*> games_;    /**< vector of currently running or awaiting games */
+    // std::vector<game::Game*> games_;    /**< vector of currently running or awaiting games */
 
     std::unordered_map<int, entity::Entity> entities_;  /**< vector of currently existing entities */
     std::queue<UpdatePtr> updateQueue_;                 /**< queue of updates from Clients */

@@ -5,9 +5,9 @@
 namespace client {
 
 Client::Client() :
-    stop_(false),
     clientThread_(&Client::run, this),
     clientID_(-1),
+    stop_(false),
     nm_(NextMove::NOMOVE),
     clientTimeout_(sf::seconds(999.0f))
     {
@@ -58,14 +58,11 @@ void Client::run() {
 
 void Client::tick() {
     sf::Vector2f vec(-1.f, -1.f);
-    sf::Int32 id;
-    entity::Entity* ent;
     int idx = -1;
-    for (int i = 0; i < allEntities_.size(); i++) {
+    for (unsigned int i = 0; i < allEntities_.size(); i++) {
 
         if (allEntities_[i].entityID_ == ownEntityID_) {
             vec = allEntities_[i].pos_;
-            id = allEntities_[i].entityID_;
             idx = i;
             break;
         }
@@ -142,6 +139,11 @@ void Client::handleServerPacket(sf::Packet& packet) {
             packet >> entityID >> posX >> posY;
             allEntities_[entityID].setPosition(sf::Vector2f(posX, posY));
             std::cout << "Updated entity ID " << entityID << " at x:y " << posX << ":" << posY << std::endl;
+        } break;
+        
+        default:
+        {
+
         } break;
     }
 }

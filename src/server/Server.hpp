@@ -1,5 +1,5 @@
-#ifndef SERVER_HPP_
-#define SERVER_HPP_
+#ifndef __SERVER_HPP_
+#define __SERVER_HPP_
 
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
@@ -7,12 +7,12 @@
 #include <vector>
 #include <queue>
 #include <unordered_map>
-#include "Client.hpp"
-#include "EventType.hpp"
+#include <src/networking/EventType.hpp>
 
 
 namespace server
 {
+    bool i_am_the_server(); //backwards compatibility
 /**
  * @brief Server class that defines main thread of game server logic. 
  * 

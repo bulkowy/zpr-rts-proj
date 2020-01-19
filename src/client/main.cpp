@@ -1,7 +1,8 @@
-#include "client.h"
+#include "Client.hpp"
 #include <iostream>
 
 int main() {
-  client::i_am_the_client();
+    client::Client client;
+    client.wait();
   return 0;
 }

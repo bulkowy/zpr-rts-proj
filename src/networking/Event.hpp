@@ -1,5 +1,5 @@
-#ifndef EVENT_HPP_
-#define EVENT_HPP_
+#ifndef __EVENT_HPP_
+#define __EVENT_HPP_
 
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>

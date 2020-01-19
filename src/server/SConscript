@@ -1,6 +1,6 @@
 Import('env')
 Import('target_path')
 
-server = env.Program(target_path + 'server', [Glob('*.cpp'), Glob('../game/*.cpp')])
+server = env.Program(target_path + 'server', [Glob('*.cpp'), Glob('../game/*.cpp'), Glob('../networking/*.cpp')])
 #libserver = env.StaticLibrary(target_path + '/test/libserver', [Glob('*.cpp'), Glob('../game/*.cpp')])
 #tests = env.BoostTests(Glob("../tests/server/*.cpp"), libserver)

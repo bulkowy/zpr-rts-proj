@@ -1,9 +1,9 @@
-#ifndef CLIENT_HPP_
-#define CLIENT_HPP_
+#ifndef __CLIENT_HPP_
+#define __CLIENT_HPP_
 
 #include <vector>
-#include "Event.hpp"
-#include "EventType.hpp"
+#include <src/networking/Event.hpp>
+#include <src/networking/EventType.hpp>
 
 namespace client
 {

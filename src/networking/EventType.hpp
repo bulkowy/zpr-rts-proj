@@ -1,5 +1,5 @@
-#ifndef EVENTTYPE_HPP_
-#define EVENTTYPE_HPP_
+#ifndef __EVENTTYPE_HPP_
+#define __EVENTTYPE_HPP_
 
 namespace networking 
 {

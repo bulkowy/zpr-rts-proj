@@ -14,9 +14,7 @@ enum class EventType
     CreateGame,
     JoinGame,
     GetGameList,
-    SetGameList,
-    UpdateEntity,
-    CreateEntity,
+    SetGameList
 };
 
 }

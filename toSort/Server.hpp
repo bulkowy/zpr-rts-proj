@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include "Client.hpp"
 #include "EventType.hpp"
-#include "Entity.hpp"
 
 
 namespace server
@@ -60,42 +59,12 @@ private:
         Peer();
         sf::TcpSocket socket;       /**< socket assigned for communication with Client */
         sf::Time lastPacketTime;    /**< timestamp of time when last packet from Client was received */
-        sf::Int32 entityID;     // todo bo to zniknie
         bool ready;                 /**< bool value defining Client's readiness to accept Server packets */
         bool timedOut;              /**< bool value defining whether Client got disconnected */
     };
 
-    /**
-     * @brief Struct defining Update packet of Entity
-     * 
-     * Used for reacting at changes from client and sending them further to other ones. 
-     */
-    struct Update {
-        /**
-         * @brief Construct a new Update object
-         * 
-         * Initializes values with illegal values as it defines Update packet as not complete. 
-         */
-        Update() : entityID(-1), newX(0), newY(0) {}
-
-        /**
-         * @brief Construct a new Update object
-         * 
-         * Given values in parameters, try to create Update object that will be completed and ready to process. 
-         * 
-         * @param id    ID of Client
-         * @param x     new X coord
-         * @param y     new Y coord
-         */
-        Update(sf::Int32 id, float x, float y) : entityID(id), newX(x), newY(y) {} 
-
-        sf::Int32 entityID; // todo tmp
-        float newX;
-        float newY;
-    };
-
+    
     typedef std::unique_ptr<Peer> PeerPtr;
-    typedef std::unique_ptr<Update> UpdatePtr;
 
     const unsigned int port_;       /**< port used for Server's main connection listener */
     sf::Clock clock_;               /**< clock defining how long is server running */
@@ -176,12 +145,6 @@ private:
     int connectedPlayers_;              /**< current amount of players connected to server */
     int maxPlayers_;                    /**< maximum possible players connected to server */
     int maxGames_;                      /**< maximum possible games created by server and simultaneously runned */
-    int entitySequence_;                /**< sequence of ID's for entities / clients */
-
-    // std::vector<game::Game*> games_;    /**< vector of currently running or awaiting games */
-
-    std::unordered_map<int, entity::Entity> entities_;  /**< vector of currently existing entities */
-    std::queue<UpdatePtr> updateQueue_;                 /**< queue of updates from Clients */
 };
 
 }

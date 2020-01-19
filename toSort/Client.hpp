@@ -4,7 +4,6 @@
 #include <vector>
 #include "Event.hpp"
 #include "EventType.hpp"
-#include "Entity.hpp"
 
 namespace client
 {
@@ -70,9 +69,6 @@ public:
      */
     void send(sf::Packet&);
 
-    // tmp
-    void poolMove(int move);
-
     /**
      * @brief Secure method to disconnect from server
      */
@@ -81,8 +77,6 @@ public:
     sf::TcpSocket socket_; /**< socket used in communication with server */
 
 private:
-    typedef std::unique_ptr<entity::Entity> EntityPtr; 
-
     sf::Thread clientThread_; /**< thread for client's main communication loop */
 
     /**
@@ -102,14 +96,6 @@ private:
     bool stop_;         /**< is client stopped */
     bool isConnected_;  /**< is client connected */
 
-    enum NextMove {
-        NOMOVE, UP, DOWN, LEFT, RIGHT
-    };
-
-    NextMove nm_;
-
-    sf::Int32 ownEntityID_;
-    std::vector<entity::Entity> allEntities_; /**< entities in game */
     sf::Time clientTimeout_; /**< time for client to timeout from server */
 
 };

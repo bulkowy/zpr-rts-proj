@@ -14,11 +14,10 @@ Server::Peer::Peer() : ready(false), timedOut(false) {
 Server::Server(int port) : 
     port_(port), 
     // gameThread_(&Server::run,this), 
-    timeoutTime_(sf::seconds(10.f)),
+    timeoutTime_(sf::seconds(30.f)),
     stop_(false),
     connectedPlayers_(0),
-    maxPlayers_(5),
-    entitySequence_(0) {
+    maxPlayers_(5) {
     
     socketListener_.setBlocking(false);
 
@@ -50,20 +49,7 @@ void Server::run() {
 }
 
 void Server::tick() {
-    networking::UpdateEntity UEevent;
-    Update update;
-    sf::Packet packet;
-    std::unordered_map<int, entity::Entity>::iterator it;
-    while (!updateQueue_.empty()) {
-        update = *(updateQueue_.front());
-        updateQueue_.pop();
-        it = entities_.find(update.entityID);
-        it->second.setPosition(sf::Vector2f(update.newX, update.newY));
-        UEevent.set(update.entityID, update.newX, update.newY);
-        packet << UEevent;
-        sendToAll(packet, update.entityID);
-        packet.clear();
-    }
+
 }
 
 void Server::setListening(bool enable) {
@@ -102,7 +88,6 @@ void Server::handleIncomingPackets() {
 void Server::handleIncomingPacket(sf::Packet& packet, Peer& peer, bool& detectedTimeout) {
     sf::Int32 type;
     packet >> type;
-    networking::UpdateEntity UEevent;
 
     std::cout << "test" << std::endl;
 
@@ -111,16 +96,7 @@ void Server::handleIncomingPacket(sf::Packet& packet, Peer& peer, bool& detected
             peer.timedOut = true;
             detectedTimeout = true;
             break;
-        case networking::EventType::UpdateEntity:
-            std::cout << "testupdate" << std::endl;
-            packet >> UEevent;
-            if (peer.entityID == UEevent.id_)
-                updateQueue_.push(UpdatePtr(new Update(UEevent.id_, UEevent.posX_, UEevent.posY_)));
-            else {
-                peer.timedOut = true;
-                detectedTimeout = true;
-            }
-            break;
+    
         default:
             break;
     }
@@ -135,7 +111,6 @@ void Server::handleConnections() {
         sf::Packet packet;
         networking::Connected CONNevent;
 
-        CONNevent.id_ = entitySequence_;
         std::cout << "Client connects at id " << CONNevent.id_ << std::endl;
         packet << CONNevent;
         clients_[connectedPlayers_]->socket.send(packet);
@@ -143,20 +118,10 @@ void Server::handleConnections() {
 
         informWorldState(clients_[connectedPlayers_]->socket);
 
-        entities_.insert({entitySequence_, entity::Entity(entitySequence_)});
-        std::unordered_map<int, entity::Entity>::iterator it;
-        it = entities_.find(entitySequence_);
-        it->second.setPosition(sf::Vector2f(100.f, 100.f));
-        networking::CreateEntity event;
-        event.set(entitySequence_, 100.f, 100.f);
-        packet << event;
-
-        clients_[connectedPlayers_]->entityID = entitySequence_;
         clients_[connectedPlayers_]->ready = true;
         sendToAll(packet);
         clients_[connectedPlayers_]->lastPacketTime = now();
         connectedPlayers_++;
-        entitySequence_++;
 
         std::cout << "New Client Connected" << std::endl;
 
@@ -172,9 +137,6 @@ void Server::handleDisconnections() {
     for ( auto peer = clients_.begin(); peer != clients_.end(); ) {
         if ( (*peer)->timedOut ) {
             connectedPlayers_--;
-            entities_.erase((*peer)->entityID);
-            event.id_ = (*peer)->entityID;
-            packet << event;
             peer = clients_.erase(peer);
 
             sendToAll(packet);
@@ -195,14 +157,6 @@ void Server::handleDisconnections() {
 void Server::informWorldState(sf::TcpSocket& socket) {
     sf::Packet packet;
 
-    for( std::unordered_map<int, entity::Entity>::iterator it = entities_.begin(); it != entities_.end(); ++it ) {
-        entity::Entity e = it->second;
-        networking::CreateEntity event;
-        event.set(e.entityID_, e.getPosition().x, e.getPosition().y);
-        packet << event;
-        socket.send(packet);
-        packet.clear();
-    } 
 }
 
 void Server::sendToAll(sf::Packet& packet) {
@@ -211,9 +165,4 @@ void Server::sendToAll(sf::Packet& packet) {
     }
 }
 
-void Server::sendToAll(sf::Packet& packet, sf::Int32 entityID) {
-    for ( PeerPtr& peer : clients_ ) {
-        if ( peer->ready && peer->entityID != entityID) peer->socket.send(packet);
-    }
-}
 }

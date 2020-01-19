@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Event.hpp"
 #include "Client.hpp"
-#include "Entity.hpp"
 #include "Server.hpp"
 
 int main () {
@@ -14,10 +13,6 @@ int main () {
     } else {
         client::Client client;
         std::string choice;
-        while ( choice != "q" || !client.getStop() ) {
-            std::cin >> choice;
-            client.poolMove(std::stoi(choice));
-        }
         client.wait();
     }
     return 0;

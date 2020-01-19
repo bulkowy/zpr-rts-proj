@@ -80,34 +80,6 @@ sf::Packet& SetGameList::deserialize(sf::Packet& packet) {
     return packet;
 }
 
-sf::Packet& CreateEntity::serialize(sf::Packet& packet) {
-    packet << sf::Int32(type_)
-           << id_
-           << posX_
-           << posY_;
-    
-    return packet;
-}
-
-sf::Packet& CreateEntity::deserialize(sf::Packet& packet) {
-    packet >> id_ >> posX_ >> posY_;
-    return packet;
-}
-
-sf::Packet& UpdateEntity::serialize(sf::Packet& packet) {
-    packet << sf::Int32(type_)
-           << id_
-           << posX_
-           << posY_;
-    
-    return packet;
-}
-
-sf::Packet& UpdateEntity::deserialize(sf::Packet& packet) {
-    packet >> id_ >> posX_ >> posY_;
-    return packet;
-}
-
 void SetGameList::add(int gameID, int players) {
     SetGameList::Game tmp = { 
         .gameID = gameID, 

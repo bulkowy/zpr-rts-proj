@@ -13,45 +13,58 @@
 #include <src/client/BasicRenderer.hpp>
 #include <src/networking/EventType.hpp>
 #include <src/networking/Event.hpp>
+#include "systems/Systems.hpp"
+
+// do clienta
+#include <src/client/MapRenderer.hpp>
+#include <src/client/BasicRenderer.hpp>
+#include <src/client/SelectedRenderer.hpp>
+#include <src/client/DestinationRenderer.hpp>
 
 using namespace std;
 
 bool server::i_am_the_server() {
-    ServerEngine engine(15, 15);
+    static const int WIDTH = 800;
+    static const int HEIGHT = 600;
+    ServerEngine engine(WIDTH/GridMap::TILE_SIDE, HEIGHT/GridMap::TILE_SIDE);
 
-    std::shared_ptr<sf::RenderWindow> window (new sf::RenderWindow(sf::VideoMode(800, 600), "Test!"));
+    std::shared_ptr<sf::RenderWindow> window (new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Test!"));
 	window->setKeyRepeatEnabled(false);
-    engine.setWindow(*window);
+    engine.setWindow(window);
 
-    BasicRenderer renderer(engine);
-    engine.addSystem(ecs::System::Ptr(&renderer));
-
-    FileManager fileManager = FileManager();
-    fileManager.init("resources/sprites.json");
+    FileManager* fileManager = FileManager::getInstance();
+    fileManager->init("resources/sprites.json");
 
     engine.createComponentStore<Position>();
     engine.createComponentStore<Move>();
     engine.createComponentStore<Health>();
     engine.createComponentStore<Renderable>();
+    engine.createComponentStore<Selectable>();
+
+    engine.addSystem(ecs::System::Ptr(new MoveSystem(engine)));
+    engine.addSystem(ecs::System::Ptr(new MapRenderer(engine)));
+    engine.addSystem(ecs::System::Ptr(new DestinationRenderer(engine)));
+    engine.addSystem(ecs::System::Ptr(new BasicRenderer(engine)));
+    engine.addSystem(ecs::System::Ptr(new SelectedRenderer(engine)));
+
 
     ecs::Entity entity1 = engine.createEntity();
     cout << "Entity1: " << entity1 << endl;
 
     engine.addComponent<Position>(entity1, Position());
-    Renderable renderable(fileManager.getSprite("misiek"));
+    Renderable renderable(fileManager->getSprite("misiek"));
     engine.addComponent<Renderable>(entity1, std::move(renderable));
     engine.addComponent<Health>(entity1, Health(100));
+    Move move(2);
+    move.setDestination(0, 5);
+    engine.addComponent<Move>(entity1, std::move(move));
+    engine.addComponent<Selectable>(entity1, Selectable(fileManager->getSprite("selected")));
 
     engine.registerEntity(entity1);
     
     while(window->isOpen()){
         sf::Event event;
-        while (window->pollEvent(event)) {
-                if( (event.type >= 7 && event.type <= 13) || event.type == sf::Event::LostFocus || event.type == sf::Event::GainedFocus ) continue;
-                // close the window on close request
-                if (event.type == sf::Event::Closed) window->close();
-                if(event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) window->close();
-            }
+        while (window->pollEvent(event)) { engine.handleEvent(event); }
         window->clear(sf::Color::Black);
         engine.update(17);
         window->display();

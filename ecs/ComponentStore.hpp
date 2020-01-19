@@ -15,9 +15,9 @@ namespace ecs {
 class IComponentStore {
 public:
     /**
-     * @brief Unique pointer do ComponentStore
+     * @brief Shared pointer do ComponentStore
      */
-    typedef std::unique_ptr<IComponentStore> Ptr;
+    typedef std::shared_ptr<IComponentStore> Ptr;
 };
 
 /**
@@ -111,7 +111,7 @@ public:
      *
      * @return Referencja do zbioru Komponentów.
      */
-    inline const std::unordered_map<Entity, C>& getComponents() {
+    inline std::unordered_map<Entity, C>& getComponents() {
         return _store;
     }
 

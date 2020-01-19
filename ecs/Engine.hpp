@@ -143,7 +143,7 @@ public:
      *
      * @return  Liczbę przetworzonych Obiektów (dany obiekt może być przetworzony wielokrotnie przez wiele systemów).
      */
-    void update(int64_t frameTime);
+    virtual void update(int64_t frameTime);
 
 private:
     /// Id ostatniego utworzonego obiektu (zaczyna się od 0)
@@ -185,10 +185,6 @@ Engine::~Engine() {
 
 // Dodaj System.
 void Engine::addSystem(const System::Ptr& aSystemPtr) {
-    // Sprawdź czy są określone wymagane komponenty
-    if ((!aSystemPtr) || (aSystemPtr->getRequiredComponents().empty())) {
-        throw std::runtime_error("System shall specified required Components");
-    }
     _systems.push_back(aSystemPtr);
 }
 

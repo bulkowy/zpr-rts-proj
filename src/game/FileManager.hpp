@@ -20,9 +20,14 @@ class FileManager {
      * Łączy nazwę obrazka z obiektem SFMLowym reprezentującym teksturę.
      */
 	std::map<std::string, std::unique_ptr<sf::Texture>> sprites;
+	static FileManager* _instance;
+
+private:
+	FileManager();
+
 	
 public:
-	FileManager();
+	static inline FileManager* getInstance() {if(!_instance) _instance = new FileManager(); return _instance;}
 	void init(const char* filename);
 	void readSpritesFromJson(Json::Value& object);
 	sf::Sprite* getSprite(std::string name);

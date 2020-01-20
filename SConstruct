@@ -4,8 +4,8 @@ import os
 # configurables
 
 libs = ['sfml-graphics','sfml-window', 'sfml-system', 'sfml-network', 'jsoncpp']
-lib_paths = ['/usr/lib/x86_64-linux-gnu/']
-include_paths = ['#/', '/usr/include']
+lib_paths = ['#/resources/libs']
+include_paths = ['#/resources/libs/include', '#/', '/usr/include']
 cpp_flags = ['-Wall', '-Werror']
 cxx_flags = ['-std=c++14']
 DEBUG = True

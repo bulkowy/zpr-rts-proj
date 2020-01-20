@@ -6,7 +6,7 @@
 #include <ecs/Engine.hpp>
 #include <src/game/GridMap.hpp>
 #include <src/game/commands/Command.hpp>
-
+#include <src/game/components/Components.hpp>
 
 
 class ClientEngine : public ecs::Engine {
@@ -29,7 +29,7 @@ public:
     std::vector<std::unique_ptr<Command>>& getCommands() {return commands_; }
     void update(unsigned int frameTime);
 
-    bool tick();
+    void run();
 };
 
 #endif

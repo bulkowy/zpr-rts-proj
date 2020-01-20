@@ -1,6 +1,7 @@
 #include "ServerEngine.hpp"
 
 #include <src/game/systems/Systems.hpp>
+#include <src/game/components/Components.hpp>
 
 ServerEngine::ServerEngine() {
     this->createComponentStore<Position>();
@@ -21,11 +22,6 @@ ServerEngine::ServerEngine() {
     this->addComponent<Move>(entity1, std::move(move));
 
     this->registerEntity(entity1);
-    
-    while(true) {
-        update(17);
-    }
-
 }
 
 void ServerEngine::executeCommands() {
@@ -39,4 +35,10 @@ void ServerEngine::executeCommands() {
 void ServerEngine::update(unsigned int frameTime) {
     executeCommands();
     Engine::update(frameTime);
+}
+
+void ServerEngine::run() {
+        while(true) {
+        update(17);
+    }
 }

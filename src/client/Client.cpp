@@ -29,6 +29,9 @@ void Client::run() {
 
     engine_ = std::make_unique<ClientEngine>();
 
+    sf::Thread gameLoop(&Client::gameLoop, this);
+    gameLoop.launch();
+
 	while (!stop_)
 	{
         if (noPacketTime > clientTimeout_) { stop(); break; }
@@ -44,18 +47,25 @@ void Client::run() {
 
 		sf::sleep(sf::milliseconds(100));
 	}
-
-    std::set<ecs::Entity> temp;
-    temp.insert(engine_->createEntity());
-    temp.insert(engine_->createEntity());
-    networking::MoveCommand moveCommand(temp, 42, 56);
-    packet << moveCommand;
-    socket_.send(packet);
-    packet.clear();
+    gameLoop.wait();
 }
 
 bool Client::tick() {
-    return engine_->tick();
+    sendCommands();
+    return !engine_->getWindow()->isOpen();
+}
+
+void Client::sendCommands() {
+    sf::Packet packet;
+    for (auto &&command : engine_->getCommands())
+    {
+        packet.clear();
+        packet << *command;
+        socket_.send(packet);
+    }
+
+    engine_->getCommands().clear();
+    
 }
 
 void Client::handleServerPacket(sf::Packet& packet) {

@@ -1,6 +1,6 @@
 Import('env')
 Import('target_path')
 
-client = env.Program(target_path + 'client', [Glob('*.cpp'), Glob('../networking/*.cpp'), Glob('../game/*.cpp'), Glob('../../ecs/*.cpp')])
+client = env.Program(target_path + 'client', [Glob('*.cpp'), Glob('../networking/*.cpp'), Glob('../game/*.cpp'), Glob('../../ecs/*.cpp'), Glob('../game/commands/*.cpp'), Glob('../game/components/*.cpp')])
 # libclient = env.StaticLibrary(target_path + '/test/libclient', Glob('*.cpp'))
 # tests = env.BoostTests(Glob("../tests/client/*.cpp"), libclient)

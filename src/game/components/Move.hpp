@@ -30,5 +30,4 @@ struct Move : public ecs::Component {
     static const ecs::ComponentType _type;
 };
 
-
 #endif

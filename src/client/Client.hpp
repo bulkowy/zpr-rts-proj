@@ -38,6 +38,13 @@ public:
     void run();
 
     /**
+     * @brief Wywołanie głównej pętli gry, wykonywanej przez silnik
+     * 
+     * Wywołanie głównej pętli gry, wykonywanej przez silnik
+     */
+    void gameLoop() { engine_->run(); }
+
+    /**
      * @brief Method used for stopping Client and its threads
      */
     void stop();
@@ -65,11 +72,16 @@ public:
     bool getStop() const { return stop_; }
     
     /**
-     * @brief Send given packet to the Server
+     * @brief Wyślij dany pakiet do serwera
      * 
-     * @param packet - packet to be sent to the server
+     * @param packet - dany pakiet
      */
     void send(sf::Packet&);
+
+    /**
+     * @brief Wyślij komendy do serwera
+     */
+    void sendCommands();
 
     /**
      * @brief Secure method to disconnect from server

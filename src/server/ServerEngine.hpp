@@ -25,7 +25,8 @@ public:
     GridMap* getGridMap() { return &map_; }
     void registerCommand(std::unique_ptr<Command> command) {commands_.push_back(std::move(command)); }
 
-    inline void update(unsigned int frameTime) override;
+    void update(unsigned int frameTime);
+    void run();
 };
 
 #endif

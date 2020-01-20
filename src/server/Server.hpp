@@ -8,6 +8,7 @@
 #include <queue>
 #include <unordered_map>
 #include <src/networking/EventType.hpp>
+#include "ServerEngine.hpp"
 
 
 namespace server
@@ -90,6 +91,21 @@ private:
     void handleIncomingPacket(sf::Packet&, Peer&, bool&);
 
     /**
+     * @brief Metoda obsługująca przychodzącą komendę
+     * 
+     * Tworzy z pakietu komendę i rejestruje ją
+     */
+    void handleIncomingCommand(sf::Packet&);
+
+    /**
+     * @brief Metoda tworząca komendę z przychodzącego pakietu
+     * 
+     * Metoda szablonowana typem przychodzącej komendy, deserializująca pakiet i tworząca odpowiedni typ komendy.
+     */
+    template<typename C>
+    void createCommand(sf::Packet&);
+
+    /**
      * @brief Handle connections and create every necessary object to sustain connection with new Client
      */
     void handleConnections();
@@ -135,6 +151,12 @@ private:
         return clock_.getElapsedTime();
     }
 
+    /**
+     * @brief Odpal silnik gry
+     */
+
+    inline void gameLoop() { engine_.run(); }
+
     std::vector<PeerPtr> clients_;      /**< clients connected to server */
 
     sf::TcpListener socketListener_;    /**< main server connection listener */
@@ -144,6 +166,8 @@ private:
     int connectedPlayers_;              /**< current amount of players connected to server */
     int maxPlayers_;                    /**< maximum possible players connected to server */
     int maxGames_;                      /**< maximum possible games created by server and simultaneously runned */
+
+    ServerEngine engine_;               /**< engine */
 };
 
 }

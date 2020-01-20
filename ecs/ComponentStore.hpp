@@ -28,7 +28,6 @@ public:
 template<typename C>
 class ComponentStore : public IComponentStore {
     static_assert(std::is_base_of<Component, C>::value, "C must be derived from the Component struct");
-    static_assert(C::_type != _invalidComponentType, "C must define a valid non-zero _type");
 
 public:
     ComponentStore() {

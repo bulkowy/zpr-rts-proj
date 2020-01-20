@@ -37,7 +37,6 @@ public:
     template<typename C>
     inline bool createComponentStore() {
         static_assert(std::is_base_of<Component, C>::value, "C must be derived from the Component struct");
-        static_assert(C::_type != _invalidComponentType, "C must define a valid non-zero _type");
         return _componentStores.insert(std::make_pair(C::_type, IComponentStore::Ptr(new ComponentStore<C>()))).second;
     }
 
@@ -53,7 +52,6 @@ public:
     template<typename C>
     inline ComponentStore<C>& getComponentStore() {
         static_assert(std::is_base_of<Component, C>::value, "C must be derived from the Component struct");
-        static_assert(C::_type != _invalidComponentType, "C must define a valid non-zero _type");
         auto iComponentStore = _componentStores.find(C::_type);
         if (_componentStores.end() == iComponentStore) {
             throw std::runtime_error("The ComponentStore does not exist");
@@ -104,7 +102,6 @@ public:
     template<typename C>
     inline bool addComponent(const Entity aEntity, C&& aComponent) {
         static_assert(std::is_base_of<Component, C>::value, "C must be derived from the Component struct");
-        static_assert(C::_type != _invalidComponentType, "C must define a valid non-zero _type");
         
         auto entity = _entities.find(aEntity);
         if (_entities.end() == entity) {

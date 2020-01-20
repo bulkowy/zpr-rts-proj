@@ -88,33 +88,4 @@ void SetGameList::add(int gameID, int players) {
     list_.emplace_back(std::move(tmp));
 }
 
-sf::Packet& MoveCommand::serialize(sf::Packet& packet) {
-    packet  << sf::Int32(getType())
-            << sf::Int16(x_)
-            << sf::Int16(y_)
-            << sf::Uint16(size());
-
-    for ( const ecs::Entity entity : entities_ ) {
-        packet  << sf::Uint32(entity);
-    }
-
-    return packet;
-}
-
-sf::Packet& MoveCommand::deserialize(sf::Packet& packet) {
-    packet >> x_ >> y_;
-
-    sf::Uint16 size;
-    packet >> size;
-
-    entities_.clear();
-    for (sf::Uint16 i=0; i<size; ++i) {
-        sf::Uint32 intEnt;
-        packet >> intEnt;
-        entities_.insert((ecs::Entity)intEnt);
-    }
-
-    return packet;
-}
-
 }

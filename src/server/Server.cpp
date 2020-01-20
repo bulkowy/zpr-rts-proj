@@ -7,9 +7,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-// #include "ServerEngine.hpp"
 #include <src/networking/EventType.hpp>
 #include <src/networking/Event.hpp>
+#include <src/game/commands/CommandTypes.hpp>
+#include <src/game/commands/Commands.hpp>
 
 using namespace std;
 
@@ -45,6 +46,9 @@ void Server::run() {
     setListening(true);
 
     std::cout << "Server started running" << std::endl;
+
+    sf::Thread gameLoop(&Server::gameLoop, this);
+    gameLoop.launch();
 
 	while (!stop_)
 	{	
@@ -99,23 +103,39 @@ void Server::handleIncomingPacket(sf::Packet& packet, Peer& peer, bool& detected
     packet >> type;
 
     std::cout << "test " << type << std::endl;
-    sf::Int16 x, y;
 
     switch (static_cast<networking::EventType>(type)) {
         case networking::EventType::Disconnected:
             peer.timedOut = true;
             detectedTimeout = true;
             break;
-        case networking::EventType::MoveCommand:
-            packet >> x >> y;
-            std::cout << "x: " << x << ", y: " << y << endl;
+        case networking::EventType::Command:
+            handleIncomingCommand(packet);
             break;
-
         default:
-            packet >> x >> y;
-            std::cout << "x: " << x << ", y: " << y << endl;
             break;
     }
+}
+
+void Server::handleIncomingCommand(sf::Packet& packet) {
+    sf::Uint16 commandType;
+    packet >> commandType;
+    switch (static_cast<CommandType>(commandType))
+    {
+    case CommandType::MoveCommand:
+        createCommand<MoveCommand>(packet);
+        
+        break;
+    
+    default:
+        break;
+    }
+}
+template<typename C>
+void Server::createCommand(sf::Packet& packet) {
+    std::unique_ptr<Command> command = std::make_unique<C>();
+    packet >> *command;
+    engine_.registerCommand(std::move(command));
 }
 
 void Server::handleConnections() {

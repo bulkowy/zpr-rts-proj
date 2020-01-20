@@ -43,15 +43,14 @@ ClientEngine::ClientEngine() {
 
 }
 
-bool ClientEngine::tick() {
+void ClientEngine::run() {
     while(window_->isOpen()){
         sf::Event event;
-        while (window_->pollEvent(event)) { if(handleEvent(event)) return true; }
+        while (window_->pollEvent(event)) { if(handleEvent(event)) return; }
         window_->clear(sf::Color::Black);
         update(17);
         window_->display();
     }
-    return false;
 }
 
 bool ClientEngine::handleEvent(sf::Event &event) {

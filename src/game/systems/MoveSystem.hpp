@@ -4,7 +4,11 @@
 #include <boost/math/special_functions/sign.hpp>
 #include <ecs/SimpleIteratingSystem.hpp>
 #include <ecs/Entity.hpp>
-#include "../../game/components/Components.hpp"
+
+#include <src/game/components/Position.hpp>
+#include <src/game/components/Move.hpp>
+// struct Move;
+// struct Position;
 
 class MoveSystem : public ecs::SimpleIteratingSystem
 {

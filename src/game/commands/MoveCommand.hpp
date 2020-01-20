@@ -6,26 +6,21 @@
 #include "Command.hpp"
 #include <ecs/Entity.hpp>
 #include <ecs/Engine.hpp>
-#include <src/game/components/Components.hpp>
 
 class MoveCommand : public Command {
 private:
-    std::set<ecs::Entity> _entitySet;
-    int _x;
-    int _y;
+    std::set<ecs::Entity> entitySet_;
+    int x_;
+    int y_;
 public:
-    MoveCommand(std::set<ecs::Entity> &entities, int &x, int &y) : _entitySet(entities), _x(x), _y(y) {}
+    MoveCommand() {}
+    MoveCommand(std::set<ecs::Entity> &entities, int &x, int &y) : entitySet_(entities), x_(x), y_(y) {}
     ~MoveCommand() {}
-    void execute(ecs::Engine& engine) {
-        auto moveStore = &engine.getComponentStore<Move>();
-        for (auto &&ent : _entitySet) {
-            Move* move = &moveStore->get(ent);
-            move->destination.x = _x;
-            move->destination.y = _y;
-        }
-    }
+    void execute(ecs::Engine& engine);
 
-    std::unique_ptr<Command> clone() { return std::make_unique<MoveCommand>(*this); }
+    sf::Packet& serialize(sf::Packet&);
+    sf::Packet& deserialize(sf::Packet&);
+
 };
 
 #endif

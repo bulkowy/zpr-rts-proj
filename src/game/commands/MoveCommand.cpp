@@ -4,7 +4,9 @@
 
 void MoveCommand::execute(ecs::Engine& engine) {
     auto moveStore = &engine.getComponentStore<Move>();
+    auto existingEntities = engine.getEntitySet();
     for (auto &&ent : entitySet_) {
+        if(existingEntities.find(ent) == existingEntities.end()) continue;
         Move* move = &moveStore->get(ent);
         move->destination.x = x_;
         move->destination.y = y_;

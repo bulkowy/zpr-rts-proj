@@ -14,6 +14,8 @@ private:
     GridMap map_;
     std::shared_ptr<sf::RenderWindow> window_;
     std::vector<std::unique_ptr<Command>> commands_;
+
+    void createMisiek(ecs::Entity);
 public:
     ClientEngine();
     GridMap* getGridMap() { return &map_; }
@@ -27,6 +29,9 @@ public:
 
     void registerCommand(std::unique_ptr<Command> command) {commands_.push_back(std::move(command)); }
     std::vector<std::unique_ptr<Command>>& getCommands() {return commands_; }
+
+    void registerEntitySet(std::set<ecs::Entity>);
+
     void update(unsigned int frameTime);
 
     void run();

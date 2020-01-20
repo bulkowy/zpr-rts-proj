@@ -3,10 +3,10 @@
 namespace ecs {
 
 Engine::Engine() :
-_lastEntity(_invalidEntity),
-_entities(),
-_componentStores(),
-_systems() {
+lastEntity_(_invalidEntity),
+entities_(),
+componentStores_(),
+systems_() {
 }
 
 Engine::~Engine() {
@@ -14,22 +14,22 @@ Engine::~Engine() {
 
 // Dodaj System.
 void Engine::addSystem(const System::Ptr& aSystemPtr) {
-    _systems.push_back(aSystemPtr);
+    systems_.push_back(aSystemPtr);
 }
 
 // Zarejestruj Obiekt do wszystkich Systemów.
 size_t Engine::registerEntity(const Entity aEntity) {
     size_t affectedSystemsCount = 0;
 
-    auto entity = _entities.find(aEntity);
-    if (_entities.end() == entity) {
+    auto entity = entities_.find(aEntity);
+    if (entities_.end() == entity) {
         throw std::runtime_error("The Entity does not exist");
     }
     auto entityComponents = (*entity).second;
 
     // Sprawdź, które Systemy będą zainteresowane tym Obiektem
-    for (auto system  = _systems.begin();
-              system != _systems.end();
+    for (auto system  = systems_.begin();
+              system != systems_.end();
             ++system) {
         auto systemRequiredComponents = (*system)->getRequiredComponents();
         for (std::size_t family = 0;
@@ -52,13 +52,13 @@ size_t Engine::registerEntity(const Entity aEntity) {
 
 // Wyrejestruj Obiekt ze wszystkich Systemów.
 void Engine::unregisterEntity(const Entity aEntity) {
-    auto entity = _entities.find(aEntity);
-    if (_entities.end() == entity) {
+    auto entity = entities_.find(aEntity);
+    if (entities_.end() == entity) {
         throw std::runtime_error("The Entity does not exist");
     }
 
-    for (auto system  = _systems.begin();
-              system != _systems.end();
+    for (auto system  = systems_.begin();
+              system != systems_.end();
             ++system) {
         (*system)->unregisterEntity(aEntity);
     }
@@ -71,8 +71,8 @@ void Engine::update(unsigned int frameTime) {
 
     auto frameStart = std::chrono::system_clock::now();
 
-    for (auto system  = _systems.begin();
-              system != _systems.end();
+    for (auto system  = systems_.begin();
+              system != systems_.end();
             ++system) {
         (*system)->update(frameTime);
     }
@@ -80,6 +80,15 @@ void Engine::update(unsigned int frameTime) {
     std::this_thread::sleep_until(frameStart + std::chrono::milliseconds(frameTime));
 
     return;
+}
+
+std::set<Entity> Engine::getEntitySet() {
+    std::set<Entity> ret;
+    for (auto &&entPair : entities_)
+    {
+        ret.insert(entPair.first);
+    }
+    return ret;
 }
 
 }

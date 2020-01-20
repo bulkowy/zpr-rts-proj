@@ -28,18 +28,14 @@ ClientEngine::ClientEngine() {
 
     // testing
     ecs::Entity entity1 = this->createEntity();
-    std::cout << "Entity1: " << entity1 << std::endl;
+    createMisiek(entity1);
 
-    this->addComponent<Position>(entity1, Position());
-    Renderable renderable(fileManager->getSprite("misiek"));
-    this->addComponent<Renderable>(entity1, std::move(renderable));
-    this->addComponent<Health>(entity1, Health(100));
-    Move move(2);
-    move.setDestination(0, 5);
-    this->addComponent<Move>(entity1, std::move(move));
-    this->addComponent<Selectable>(entity1, Selectable(fileManager->getSprite("selected")));
-
-    registerEntity(entity1);
+    ecs::Entity entity2 = createEntity();
+    ecs::Entity entity3 = createEntity();
+    ecs::Entity entity4 = createEntity();
+    createMisiek(entity2);
+    createMisiek(entity3);
+    createMisiek(entity4);
 
 }
 
@@ -121,4 +117,37 @@ void ClientEngine::update(unsigned int frameTime) {
     Engine::update(frameTime);
 }
 
+void ClientEngine::registerEntitySet(std::set<ecs::Entity> newEntities) {
+    std::set<ecs::Entity> entities = getEntitySet();
+    std::vector<ecs::Entity> difference(entities.size()); // zbiór różnicowy - najpierw starych Obiektów do usunięcia, potem nowych do dodania
 
+    std::vector<ecs::Entity>::iterator it=std::set_difference(entities.begin(), entities.end(), newEntities.begin(), newEntities.end(), difference.begin());
+    difference.resize(it-difference.begin());
+    for (auto &&deadEntity : difference)
+    {
+        unregisterEntity(deadEntity);
+    }
+    
+    difference.resize(newEntities.size());
+    it=std::set_difference(newEntities.begin(), newEntities.end(), entities.begin(), entities.end(), difference.begin());
+    difference.resize(it-difference.begin());
+        for (auto &&newEntity : difference)
+    {
+        createMisiek(newEntity);
+    }
+
+}
+
+void ClientEngine::createMisiek(ecs::Entity entity) {
+    this->addComponent<Position>(entity, Position(0, 3*(int)entity));
+    Renderable renderable(FileManager::getInstance()->getSprite("misiek"));
+    this->addComponent<Renderable>(entity, std::move(renderable));
+    this->addComponent<Health>(entity, Health(100));
+    Move move(2);
+    move.setDestination(0, 5);
+    this->addComponent<Move>(entity, std::move(move));
+    this->addComponent<Selectable>(entity, Selectable(FileManager::getInstance()->getSprite("selected")));
+
+    registerEntity(entity);
+
+}

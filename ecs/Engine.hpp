@@ -37,7 +37,7 @@ public:
     template<typename C>
     inline bool createComponentStore() {
         static_assert(std::is_base_of<Component, C>::value, "C must be derived from the Component struct");
-        return _componentStores.insert(std::make_pair(C::_type, IComponentStore::Ptr(new ComponentStore<C>()))).second;
+        return componentStores_.insert(std::make_pair(C::_type, IComponentStore::Ptr(new ComponentStore<C>()))).second;
     }
 
     /**
@@ -52,8 +52,8 @@ public:
     template<typename C>
     inline ComponentStore<C>& getComponentStore() {
         static_assert(std::is_base_of<Component, C>::value, "C must be derived from the Component struct");
-        auto iComponentStore = _componentStores.find(C::_type);
-        if (_componentStores.end() == iComponentStore) {
+        auto iComponentStore = componentStores_.find(C::_type);
+        if (componentStores_.end() == iComponentStore) {
             throw std::runtime_error("The ComponentStore does not exist");
         }
         return reinterpret_cast<ComponentStore<C>&>(*(iComponentStore->second));
@@ -74,9 +74,9 @@ public:
      * @return  Id nowego Obiektu.
      */
     inline Entity createEntity() {
-        assert(_lastEntity < std::numeric_limits<Entity>::max());
-        _entities.insert(std::make_pair((_lastEntity + 1), ComponentTypeSet()));
-        return (++_lastEntity);
+        assert(lastEntity_ < std::numeric_limits<Entity>::max());
+        entities_.insert(std::make_pair((lastEntity_ + 1), ComponentTypeSet()));
+        return (++lastEntity_);
     }
 
     /**
@@ -103,8 +103,8 @@ public:
     inline bool addComponent(const Entity aEntity, C&& aComponent) {
         static_assert(std::is_base_of<Component, C>::value, "C must be derived from the Component struct");
         
-        auto entity = _entities.find(aEntity);
-        if (_entities.end() == entity) {
+        auto entity = entities_.find(aEntity);
+        if (entities_.end() == entity) {
             throw std::runtime_error("The Entity does not exist");
         }
         // Dodaj ComponentType do Obiektu
@@ -141,31 +141,45 @@ public:
      * @return  Liczbę przetworzonych Obiektów (dany obiekt może być przetworzony wielokrotnie przez wiele systemów).
      */
     virtual void update(unsigned int frameTime);
+    
+    /**
+     * @brief  Uzyskaj zbiór wszystkich zarejestrowanych Obiektów.
+     *
+     * @return  Zbiór wszystkich zarejestrowanych Obiektów;
+     */
+    std::set<Entity> getEntitySet();
+
+    /**
+     * @brief  Uzyskaj zbiór wszystkich Komponentów.
+     *
+     * @return  Zbiór wszystkich Komponentów.
+     */
+    inline std::map<ComponentType, IComponentStore::Ptr> getComponentStores() { return componentStores_; }
 
 private:
     /// Id ostatniego utworzonego obiektu (zaczyna się od 0)
-    Entity                                          _lastEntity;
+    Entity                                          lastEntity_;
 
     /**
      * @brief Hashmapa wszystkich zarejestrowanych Obiektów, określająca typy posiadanych Komponentów.
      *
      *  Wiąże id każdego Obiektu z Typami posiadanych Komponentów.
      */
-    std::unordered_map<Entity, ComponentTypeSet>    _entities;
+    std::unordered_map<Entity, ComponentTypeSet>    entities_;
 
     /**
      * @brief Mapa wszystkich Zbiorów Komponentów w zależności od Typu.
      *
      *  Zbiór wszystkich Komponentów wszystkich Obiektów, pogrupowany Typami.
      */
-    std::map<ComponentType, IComponentStore::Ptr>   _componentStores;
+    std::map<ComponentType, IComponentStore::Ptr>   componentStores_;
 
     /**
      * @brief Lista wszystkich systemów, w kolejności dodawania.
      *
      * Jeśli pointer do danego Systemu występuje w liście dwa razy, System zostanie dwa razy wywołany w każdym kroku silnika (w kolejności dodawanai do listy).
      */
-    std::vector<System::Ptr>                        _systems;
+    std::vector<System::Ptr>                        systems_;
 };
 
 } // namespace ecs

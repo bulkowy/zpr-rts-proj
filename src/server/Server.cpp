@@ -130,12 +130,14 @@ void Server::handleIncomingCommand(sf::Packet& packet) {
     default:
         break;
     }
+    sendWorldState();
 }
 template<typename C>
 void Server::createCommand(sf::Packet& packet) {
-    std::unique_ptr<Command> command = std::make_unique<C>();
+    C* command = new C();
+    // std::unique_ptr<Command> command = std::make_unique<C>();
     packet >> *command;
-    engine_.registerCommand(std::move(command));
+    engine_.registerCommand(std::unique_ptr<Command>(command));
 }
 
 void Server::handleConnections() {
@@ -152,8 +154,6 @@ void Server::handleConnections() {
         packet << CONNevent;
         clients_[connectedPlayers_]->socket.send(packet);
         packet.clear();
-
-        informWorldState(clients_[connectedPlayers_]->socket);
 
         clients_[connectedPlayers_]->ready = true;
         sendToAll(packet);
@@ -191,9 +191,15 @@ void Server::handleDisconnections() {
     }
 }
 
-void Server::informWorldState(sf::TcpSocket& socket) {
+void Server::sendWorldState() {
     sf::Packet packet;
-
+    packet << (sf::Int32) networking::EventType::EntitySet;
+    packet << (sf::Uint32) engine_.getEntitySet().size();
+    for (auto &&entity : engine_.getEntitySet())
+    {
+        packet << sf::Uint32(entity);
+    }
+    sendToAll(packet);
 }
 
 void Server::sendToAll(sf::Packet& packet) {

@@ -86,6 +86,18 @@ void Client::handleServerPacket(sf::Packet& packet) {
             std::cout << "Żegnaj :c " << std::endl;
             
         } break;
+
+        case networking::EventType::EntitySet:
+        {
+            sf::Uint32 size, ent;
+            packet >> size;
+            std::set<ecs::Entity> set;
+            for(sf::Uint32 i = 0; i<size; ++i) {
+                packet >> ent;
+                set.insert(ecs::Entity(ent));
+            }
+            engine_->registerEntitySet(set);
+        } break;
         
         default:
         {

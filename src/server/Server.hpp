@@ -136,11 +136,11 @@ private:
     void tick();
 
     /**
-     * @brief Send all information about world to selected socket
+     * @brief Send all information about the world to all clients
      * 
      * @param socket - socket that will receive world's information
      */
-    void informWorldState(sf::TcpSocket&);
+    void sendWorldState();
 
     /**
      * @brief Return for how long server runs

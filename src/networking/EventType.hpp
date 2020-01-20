@@ -15,7 +15,9 @@ enum class EventType
     JoinGame,
     GetGameList,
     SetGameList,
-    Command
+    Command,
+    EntitySet,
+    WorldInfo
 };
 
 }

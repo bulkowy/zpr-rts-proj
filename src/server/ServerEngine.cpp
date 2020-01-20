@@ -39,6 +39,6 @@ void ServerEngine::update(unsigned int frameTime) {
 
 void ServerEngine::run() {
         while(true) {
-        update(17);
+        update(100);
     }
 }

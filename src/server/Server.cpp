@@ -12,6 +12,8 @@
 #include <src/game/commands/CommandTypes.hpp>
 #include <src/game/commands/Commands.hpp>
 
+#include <src/game/components/Components.hpp>
+
 using namespace std;
 
 namespace server
@@ -56,13 +58,10 @@ void Server::run() {
 		handleConnections();
 
         tick();
-
-		sf::sleep(sf::milliseconds(100));
 	}	
 }
 
 void Server::tick() {
-
 }
 
 void Server::setListening(bool enable) {
@@ -131,6 +130,7 @@ void Server::handleIncomingCommand(sf::Packet& packet) {
         break;
     }
     sendWorldState();
+
 }
 template<typename C>
 void Server::createCommand(sf::Packet& packet) {
@@ -200,6 +200,17 @@ void Server::sendWorldState() {
         packet << sf::Uint32(entity);
     }
     sendToAll(packet);
+    packet.clear();
+
+    auto moveStore = engine_.getComponentStore<Move>();
+    for (auto &&comp : moveStore.getComponents())
+    {
+        packet  << sf::Int32(networking::EventType::WorldInfo)
+                << sf::Uint32(comp.first)
+                << comp.second;
+        sendToAll(packet);
+        packet.clear();
+    }    
 }
 
 void Server::sendToAll(sf::Packet& packet) {

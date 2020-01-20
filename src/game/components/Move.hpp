@@ -3,6 +3,7 @@
 
 #include <ecs/Component.hpp>
 #include <ecs/ComponentType.hpp>
+#include <SFML/Network.hpp>
 
 /**
  * Komponent odpowiadający za dane związane z ruchem danego Obiektu
@@ -28,6 +29,13 @@ struct Move : public ecs::Component {
     Move(float aSpeed) : speed(aSpeed) {}
 
     static const ecs::ComponentType _type;
+
+    friend sf::Packet& operator>>(sf::Packet& packet, Move& move);
+    friend sf::Packet& operator<<(sf::Packet& packet, Move& move);
+
+    sf::Packet& serialize(sf::Packet&);
+    sf::Packet& deserialize(sf::Packet&);
+
 };
 
 #endif

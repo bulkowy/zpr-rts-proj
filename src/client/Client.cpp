@@ -98,6 +98,17 @@ void Client::handleServerPacket(sf::Packet& packet) {
             }
             engine_->registerEntitySet(set);
         } break;
+
+        case networking::EventType::WorldInfo:
+        {
+            ecs::ComponentStore<Move>& moveStore = engine_->getComponentStore<Move>();
+            sf::Uint32 entity;
+            packet >> entity;
+            std::cout << "ent: " << entity;
+            Move& moveComp = moveStore.get(entity);
+            packet >> moveComp;
+            std::cout << " " << moveComp.destination.x << " " << moveComp.destination.y << std::endl;
+        } break;
         
         default:
         {

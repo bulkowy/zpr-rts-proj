@@ -157,7 +157,15 @@ private:
 
     inline void gameLoop() { engine_.run(); }
 
+    class ClientIdSequence {
+    private:
+        unsigned int newId = 1;
+    public:
+        inline unsigned int get() { return newId++; }
+    };
+
     std::vector<PeerPtr> clients_;      /**< clients connected to server */
+    ClientIdSequence idseq_;            /**< sequence of ids to give to connecting clients*/
 
     sf::TcpListener socketListener_;    /**< main server connection listener */
     sf::Time timeoutTime_;              /**< time defining how long silence from Client will be tolerated */

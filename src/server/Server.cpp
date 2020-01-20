@@ -146,6 +146,7 @@ void Server::handleConnections() {
     if (socketListener_.accept(clients_[connectedPlayers_]->socket) == sf::TcpListener::Done) {
         sf::Packet packet;
         networking::Connected CONNevent;
+        CONNevent.id_ = idseq_.get();
 
         std::cout << "Client connects at id " << CONNevent.id_ << std::endl;
         packet << CONNevent;
